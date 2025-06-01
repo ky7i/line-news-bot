@@ -43,7 +43,7 @@ NEWS_API_PARAMETER="?q=tech&sortBy=relevancy&pageSize=5&apiKey="
 NEWS_API_KEY=<<NewsAPIから取得したAPIキー>>  
 ```
 
-NES_API_PARAMETERはニュース記事の検索条件  
+NEWS_API_PARAMETERはニュース記事の検索条件  
 下記ドキュメントに従い、欲しい記事の検索条件を設定できます。  
 https://newsapi.org/docs/endpoints/everything  
 
