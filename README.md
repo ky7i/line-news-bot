@@ -18,15 +18,15 @@
 * AWS EventBridge
 
 ## 使用API一覧
-* Messaging API
-https://developers.line.biz/ja/services/messaging-api/
-LINEのAPI
-LINEへのメッセージ送信に使用
+* Messaging API  
+https://developers.line.biz/ja/services/messaging-api/  
+LINEのAPI  
+LINEへのメッセージ送信に使用  
 
-* News API
-https://newsapi.org/
-ニュース記事の取得を行うAPI
-海外のニュースがメイン
+* News API  
+https://newsapi.org/  
+ニュース記事の取得を行うAPI  
+海外のニュースがメイン  
 
 ## 手順
 // TODO
