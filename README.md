@@ -31,4 +31,21 @@ https://newsapi.org/
 ## 手順
 // TODO
 
-Keiya Yamaguchi
+* プロジェクトのルートディレクトリに .env ファイルを作成する。  
+下記を .env に記述する。  
+```
+LINE_API_ACCESS_TOKEN=<<LINE Developer のコンソールから取得したアクセストークン>>  
+LINE_API_USER_ID=<<LINE Developer のコンソールから取得したLINEユーザID>>  
+LINE_API_URI="https://api.line.me/v2/bot/message/push"  
+
+NEWS_API_URI="https://newsapi.org/v2/everything"  
+NEWS_API_PARAMETER="?q=tech&sortBy=relevancy&pageSize=5&apiKey="  
+NEWS_API_KEY=<<NewsAPIから取得したAPIキー>>  
+```
+
+NES_API_PARAMETERはニュース記事の検索条件  
+下記ドキュメントに従い、欲しい記事の検索条件を設定できます。  
+https://newsapi.org/docs/endpoints/everything  
+
+## TODO
+・本当は日本語のニュース記事が欲しい
