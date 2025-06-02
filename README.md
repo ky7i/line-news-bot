@@ -49,3 +49,4 @@ https://newsapi.org/docs/endpoints/everything
 
 ## TODO
 ・本当は日本語のニュース記事が欲しい
+・CI/CD

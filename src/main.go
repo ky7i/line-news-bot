@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func main() {
+func handler() {
 	// TODO : パスをハードコーディングしたくない
-	err := godotenv.Load("../.env")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// err := godotenv.Load("../.env")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
 	news, err := CallNewsAPI()
 	if err != nil {
@@ -24,4 +25,8 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+}
+
+func main() {
+	lambda.Start(handler)
 }
