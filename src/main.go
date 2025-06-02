@@ -8,10 +8,10 @@ import (
 func main() {
 	// TODO : パスをハードコーディングしたくない
 	err := godotenv.Load("../.env")
-  if err != nil {
-    fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
 		return
-  }
+	}
 
 	news, err := CallNewsAPI()
 	if err != nil {
