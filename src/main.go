@@ -6,11 +6,22 @@ import (
 )
 
 func main() {
+	// TODO : パスをハードコーディングしたくない
 	err := godotenv.Load("../.env")
   if err != nil {
-    fmt.Println("Error loading .env file")
+    fmt.Println(err)
+		return
   }
 
-	news := CallNewsAPI()
-	CallLineAPI(news)
+	news, err := CallNewsAPI()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	err = CallLineAPI(news)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
