@@ -11,5 +11,7 @@ COPY --from=build /home/line-news-bot/bootstrap ${LAMBDA_RUNTIME_DIR}
 COPY --from=build /home/line-news-bot/function.sh ${LAMBDA_TASK_ROOT}
 # Copy exec file 
 COPY --from=build /home/line-news-bot/src/main /home/ 
+RUN chmod +x ${LAMBDA_RUNTIME_DIR}/bootstrap \
+&& chmod +x ${LAMBDA_TASK_ROOT}/function.sh
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
 CMD [ "function.handler" ]
