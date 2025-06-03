@@ -8,4 +8,4 @@ RUN CGO_ENABLED=0 go build -tags lambda.norpc -o main
 FROM public.ecr.aws/lambda/provided:al2
 COPY --from=build /home/line-news-bot/src/main ./main
 RUN chmod +x /usr/local/bin/aws-lambda-rie ./main
-ENTRYPOINT [ "/usr/local/bin/aws-lambda-rie", "./main" ]
+CMD [ "./main" ]
