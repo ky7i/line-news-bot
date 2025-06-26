@@ -1,14 +1,14 @@
 package main
 
 import (
-	"strings"
-	"io"
-	"os"
-	"net/http"
 	"encoding/json"
+	"io"
+	"net/http"
+	"os"
+	"strings"
 )
 
-func CallNewsAPI() (string, error){
+func CallNewsAPI() (string, error) {
 	// TODO : mainで取得し、引数で渡されるようにする
 	// 環境変数の取得
 	NEWS_API_URI := os.Getenv("NEWS_API_URI")
@@ -36,7 +36,7 @@ func CallNewsAPI() (string, error){
 	articles := result["articles"].([]interface{})
 
 	for i := 0; i < len(articles); i++ {
-		content := articles[i].(map[string]interface{})["content"].(string)
+		content := articles[i].(map[string]interface{})["title"].(string)
 		// NewsAPIのcontentに改行文字が含まれている。
 		// おそらく、contentは "Summary\r\nDetail" という仕様
 		// Detailは文字数が多いため使用しない
