@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +29,26 @@ jobs:
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       run: |
         IMAGE_TAG=latest
+        IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+        echo "Building Docker image..."
         docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-        docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+        echo "Tagging image..."
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG $IMAGE_URI
+
+        echo "Pushing image to ECR..."
+        docker push $IMAGE_URI
+
+        echo "Storing image URI for later..."
+        echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+
+    - name: Update AWS Lambda to use new image
+      env:
+        LAMBDA_FUNCTION_NAME: ${{ secrets.LAMBDA_FUNCTION_NAME }}
+        IMAGE_URI: ${{ env.IMAGE_URI }}
+      run: |
+        echo "Updating Lambda function: $LAMBDA_FUNCTION_NAME"
+        aws lambda update-function-code \
+          --function-name $LAMBDA_FUNCTION_NAME \
+          --image-uri $IMAGE_URI
