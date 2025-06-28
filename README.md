@@ -1,4 +1,3 @@
-# line-news-bot
 ニュース記事を毎朝LINEに通知する
 
 ## やりたいこと
@@ -28,7 +27,6 @@ LINEへのメッセージ送信に使用
 * News API  
 https://newsapi.org/  
 ニュース記事の取得を行うAPI  
-海外のニュースがメイン  
 
 ## 手順
 1. Amazon ECR へのコンテナの登録  
@@ -59,8 +57,8 @@ NEWS_API_KEY=<<NewsAPIから取得したAPIキー>>
 https://newsapi.org/docs/endpoints/everything  
 
 ## TODO
-・本当は日本語のニュース記事が欲しい  
-・CI/CD  
+・CI/CD   
+・機能の拡張(Googleカレンダーから予定を取得しリマインド)
 
 ## こだわりポイント
 ・コンテナランライムの設定  
@@ -72,3 +70,7 @@ lambdaの実行環境とlambdaサービスの連携
 > 
 > 【Java】Lombokで冗長コードを削減しよう  
 > https://www.casleyconsulting.co.jp/blog/engineer/107/  
+
+・CI環境の作成  
+実行環境が AWS Lambda のため、テスト環境はlambdaを再現する必要がある。  
+> https://github.com/aws/aws-lambda-runtime-interface-emulator
