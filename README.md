@@ -46,7 +46,7 @@ NEWS_API_KEY=<<NewsAPIから取得したAPIキー>>
 ```
 
 3. Amazon Eventbridge スケジュールの作成  
-* ターゲットには line-news-bot を指定  
+* ターゲットには line-news-bot を指定 
 
 * Lambda関数にアクセスするための IAMポリシー、IAMロールを作成する。  
 > [!Tips]  
@@ -57,8 +57,9 @@ NEWS_API_KEY=<<NewsAPIから取得したAPIキー>>
 https://newsapi.org/docs/endpoints/everything  
 
 ## TODO
-・CI/CD   
-・機能の拡張(Googleカレンダーから予定を取得しリマインド)
+- CI/CD   
+- 機能の拡張(Googleカレンダーから予定を取得しリマインド)  
+- Flex Message を使ったデザイン
 
 ## こだわりポイント
 ・コンテナランライムの設定  
