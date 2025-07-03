@@ -4,17 +4,10 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 )
 
-func CallNewsAPI() (string, error) {
-	// TODO : mainで取得し、引数で渡されるようにする
-	// 環境変数の取得
-	NEWS_API_URI := os.Getenv("NEWS_API_URI")
-	NEWS_API_PARAMETER := os.Getenv("NEWS_API_PARAMETER")
-	NEWS_API_KEY := os.Getenv("NEWS_API_KEY")
-
+func CallNewsAPI(NEWS_API_URI string, NEWS_API_PARAMETER string, NEWS_API_KEY string) (string, error) {
 	res, err := http.Get(NEWS_API_URI + NEWS_API_PARAMETER + NEWS_API_KEY)
 	if err != nil {
 		return "", err

@@ -1,23 +1,16 @@
 package main
 
 import (
-	"os"
+	"bytes"
 	"encoding/json"
 	"net/http"
-	"bytes"
 )
 
-func CallLineAPI(inputText string) error {
-	// TODO : mainで取得し、引数で渡されるようにする
-	// 環境変数の取得
-	LINE_API_ACCESS_TOKEN := os.Getenv("LINE_API_ACCESS_TOKEN")
-	LINE_API_USER_ID := os.Getenv("LINE_API_USER_ID")
-	LINE_API_URI := os.Getenv("LINE_API_URI")
-
+func CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
 	// HTTPリクエストのBody部作成
-	payload := map[string]interface{} {
+	payload := map[string]interface{}{
 		"to": LINE_API_USER_ID,
-		"messages": []map[string]string {
+		"messages": []map[string]string{
 			{
 				"type": "text",
 				"text": inputText,
@@ -37,7 +30,7 @@ func CallLineAPI(inputText string) error {
 
 	req.Header.Add("Content-Type", "application/json")
 	// 認証情報はヘッダーに設定
-	req.Header.Add("Authorization", "Bearer " + LINE_API_ACCESS_TOKEN)
+	req.Header.Add("Authorization", "Bearer "+LINE_API_ACCESS_TOKEN)
 
 	// 送信処理
 	client := &http.Client{}
