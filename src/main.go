@@ -23,7 +23,7 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 	// LINE_API
 	LINE_API_ACCESS_TOKEN := os.Getenv("LINE_API_ACCESS_TOKEN")
 	LINE_API_USER_ID := os.Getenv("LINE_API_USER_ID")
-	LINE_API_URI := os.Getenv("LINE_API_URI ")
+	LINE_API_URI := os.Getenv("LINE_API_URI")
 
 	// NewsAPI
 	NEWS_API_URI := os.Getenv("NEWS_API_URI")
