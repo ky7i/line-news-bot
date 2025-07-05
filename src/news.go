@@ -31,8 +31,8 @@ func CallNewsAPI(NEWS_API_URI string, NEWS_API_PARAMETER string, NEWS_API_KEY st
 	for i := 0; i < len(articles); i++ {
 		content := articles[i].(map[string]interface{})["title"]
 		// titleのvalueがnullのケースへのバリデーション
-		contentStr, err := content.(string)
-		if err != false {
+		contentStr, ok := content.(string)
+		if !ok {
 			continue
 		}
 
