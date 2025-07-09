@@ -3,6 +3,9 @@
 set -euo pipefail
 
 # Initialization - load function handler
+echo "LAMBDA_TASK_ROOT: $LAMBDA_TASK_ROOT"
+echo "_HANDLER: $_HANDLER"
+echo "Resolved source file: $LAMBDA_TASK_ROOT/$(echo $_HANDLER | cut -d. -f1).sh"
 source $LAMBDA_TASK_ROOT/"$(echo $_HANDLER | cut -d. -f1).sh"
 
 # Processing
