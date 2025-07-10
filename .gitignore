@@ -1,2 +1,4 @@
 .env
+token.json
+credentials.json
 /aws-lambda-runtime-interface-emulator

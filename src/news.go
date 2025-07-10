@@ -2,13 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
 )
 
-func CallNewsAPI(NEWS_API_URI string, NEWS_API_PARAMETER string, NEWS_API_KEY string) (string, error) {
-	res, err := http.Get(NEWS_API_URI + NEWS_API_PARAMETER + NEWS_API_KEY)
+func CallNewsAPI(requestURL string) (string, error) {
+	fmt.Println("NewsAPI requestURL : ", requestURL)
+	res, err := http.Get(requestURL)
 	if err != nil {
 		return "", err
 	}
