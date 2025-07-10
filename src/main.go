@@ -18,8 +18,8 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 
 	// 環境変数
 	// Googleカレンダー
-	AWS_SECRET_MANAGER_NAME := os.Getenv("AWS_SECRET_MANAGER_NAME")
-	AWS_SECRET_MANAGER_REGION := os.Getenv("AWS_SECRET_MANAGER_REGION")
+	// AWS_SECRET_MANAGER_NAME := os.Getenv("AWS_SECRET_MANAGER_NAME")
+	// AWS_SECRET_MANAGER_REGION := os.Getenv("AWS_SECRET_MANAGER_REGION")
 
 	// LINE_API
 	LINE_API_ACCESS_TOKEN := os.Getenv("LINE_API_ACCESS_TOKEN")
@@ -29,13 +29,13 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 	// NewsAPI
 	NEWS_API_BASE_URL := os.Getenv("NEWS_API_BASE_URL")
 
-	credential, err := GetSecretString(AWS_SECRET_MANAGER_NAME, AWS_SECRET_MANAGER_REGION)
-	if err != nil {
-		fmt.Println(err)
-		return response, err
-	}
-	schedule := getCalendar(credential)
-	fmt.Println("schedule : ", schedule)
+	// credential, err := GetSecretString(AWS_SECRET_MANAGER_NAME, AWS_SECRET_MANAGER_REGION)
+	// if err != nil {
+	// fmt.Println(err)
+	// return response, err
+	// }
+	// schedule := getCalendar(credential)
+	// fmt.Println("schedule : ", schedule)
 
 	params := url.Values{}
 	params.Add("q", os.Getenv("NEWS_API_QUERY"))
