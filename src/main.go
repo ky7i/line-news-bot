@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -44,7 +45,8 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 	params.Add("language", os.Getenv("NEWS_API_LANGUAGE"))
 	params.Add("apiKey", os.Getenv("NEWS_API_KEY"))
 
-	news, err := CallNewsAPI(NEWS_API_BASE_URL + "?" + params.Encode())
+	newsApiClient := &NewsApiClient{NewsHttpClient: &http.Client{}}
+	news, err := newsApiClient.CallNewsAPI(NEWS_API_BASE_URL + "?" + params.Encode())
 	if err != nil {
 		fmt.Println(err)
 		return response, err
