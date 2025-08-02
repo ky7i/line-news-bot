@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/url"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -52,7 +52,8 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 		return response, err
 	}
 
-	err = CallLineAPI(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, news)
+	lineApiClient := &LineApiClient{RequestCreator: &DefaultRequestCreator{}, LineHttpClient: &http.Client{}}
+	err = lineApiClient.CallLineAPI(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, news)
 	if err != nil {
 		fmt.Println(err)
 		return response, err
