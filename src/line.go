@@ -49,8 +49,7 @@ func (l *LineApiClient) CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string
 	req.Header.Add("Authorization", "Bearer "+LINE_API_ACCESS_TOKEN)
 
 	// 送信処理
-	client := &http.Client{}
-	_, err = client.Do(req)
+	_, err = l.LineHttpClient.Do(req)
 	if err != nil {
 		return err
 	}
