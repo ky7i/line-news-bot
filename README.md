@@ -56,6 +56,19 @@ NEWS_API_KEY=<<NewsAPIから取得したAPIキー>>
 下記ドキュメントに従い、欲しい記事の検索条件を設定できます。  
 https://newsapi.org/docs/endpoints/everything  
 
+## CI  
+* Dockerコンテナのビルド、起動  
+下記コマンドを実行  
+```
+docker build -t line-news-bot-ci .  
+docker run -p 9000:8080 -v .\aws-lambda-rie\aws-lambda-rie:/aws-lambda-rie --name line-news-bot-ci --env-file .env -e _HANDLER=function.handler -itd line-news-bot-ci  
+```
+* curlでの疎通確認  
+```
+curl -X POST http://localhost:9000/2015-03-31/functions/function/invocations ^
+  -H "Content-Type: application/json" ^
+  -d "{}"
+```
 ## TODO
 - CI/CD   
 - 機能の拡張(Googleカレンダーから予定を取得しリマインド)  

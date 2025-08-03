@@ -2,15 +2,20 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
-	"strings"
 )
 
-func CallNewsAPI(requestURL string) (string, error) {
-	fmt.Println("NewsAPI requestURL : ", requestURL)
-	res, err := http.Get(requestURL)
+type NewsHttpClient interface {
+	Get(url string) (resp *http.Response, err error)	
+}
+
+type NewsApiClient struct {
+	NewsHttpClient NewsHttpClient
+}
+
+func (n *NewsApiClient) CallNewsAPI(requestURL string) (string, error) {
+	res, err := n.NewsHttpClient.Get(requestURL)
 	if err != nil {
 		return "", err
 	}
@@ -27,6 +32,8 @@ func CallNewsAPI(requestURL string) (string, error) {
 		return "", err
 	}
 
+	// NewsAPIのレスポンスの整形
+	// TODO: 別関数への切り出し
 	contents := "---news---"
 	articles := result["articles"].([]interface{})
 
@@ -37,13 +44,7 @@ func CallNewsAPI(requestURL string) (string, error) {
 		if !ok {
 			continue
 		}
-
-		// NewsAPIのcontentに改行文字が含まれている。
-		// おそらく、contentは "Summary\r\nDetail" という仕様
-		// Detailは文字数が多いため使用しない
-		// TODO : 仕様の詳細を把握
-		contentFormatted, _, _ := strings.Cut(contentStr, "\r\n")
-		contents = contents + "\r\n" + contentFormatted
+		contents = contents + "\r\n" + contentStr
 	}
 	return contents, nil
 }

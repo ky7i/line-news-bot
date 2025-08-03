@@ -3,10 +3,26 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 )
 
-func CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
+type RequestCreator interface {
+	NewRequest(method, url string, body io.Reader) (*http.Request, error)
+}
+
+type DefaultRequestCreator struct{}
+
+func (d *DefaultRequestCreator) NewRequest(method, url string, body io.Reader) (*http.Request, error) {
+	return http.NewRequest(method, url, body)
+}
+
+type LineApiClient struct {
+	RequestCreator RequestCreator
+	LineHttpClient *http.Client
+}
+
+func (l *LineApiClient) CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
 	// HTTPリクエストのBody部作成
 	payload := map[string]interface{}{
 		"to": LINE_API_USER_ID,
@@ -23,7 +39,7 @@ func CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_T
 		return err
 	}
 
-	req, err := http.NewRequest("POST", LINE_API_URI, bytes.NewReader(jsonDate))
+	req, err := l.RequestCreator.NewRequest("POST", LINE_API_URI, bytes.NewReader(jsonDate))
 	if err != nil {
 		return err
 	}
@@ -33,8 +49,7 @@ func CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_T
 	req.Header.Add("Authorization", "Bearer "+LINE_API_ACCESS_TOKEN)
 
 	// 送信処理
-	client := &http.Client{}
-	_, err = client.Do(req)
+	_, err = l.LineHttpClient.Do(req)
 	if err != nil {
 		return err
 	}
