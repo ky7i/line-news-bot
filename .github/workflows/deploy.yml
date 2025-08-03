@@ -20,27 +20,45 @@ jobs:
 
       - name: Run tests
         run: go test ./...
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker image
-        run: |
-          docker build -t lambda-image .
-          docker tag lambda-image:latest ${{ secrets.ECR_REPOSITORY_URI }}:latest
-
-      - name: Push to ECR
-        run: |
-          docker push ${{ secrets.ECR_REPOSITORY_URI }}:latest
-
-      - name: Update Lambda Function
+      - name: Build, tag, and push image to ECR
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
+          IMAGE_TAG=latest
+          IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  
+          echo "Building Docker image..."
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+  
+          echo "Tagging image..."
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $IMAGE_URI
+  
+          echo "Pushing image to ECR..."
+          docker push $IMAGE_URI
+  
+          echo "Storing image URI for later..."
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+
+      - name: Update AWS Lambda to use new image
+        env:
+          LAMBDA_FUNCTION_NAME: ${{ secrets.LAMBDA_FUNCTION_NAME }}
+          IMAGE_URI: ${{ env.IMAGE_URI }}
+        run: |
+          echo "Updating Lambda function: $LAMBDA_FUNCTION_NAME"
           aws lambda update-function-code \
-            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-            --image-uri ${{ secrets.ECR_REPOSITORY_URI }}:latest \
-            --region ${{ secrets.AWS_REGION }}
+            --function-name $LAMBDA_FUNCTION_NAME \
+            --image-uri $IMAGE_URI
+
