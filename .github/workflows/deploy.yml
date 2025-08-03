@@ -1,9 +1,9 @@
-name: CI/CD for Go Lambda
+name: CD for Go Lambda
 
 on:
-  push:
+  push: 
     branches:
-      - develop
+      - main 
 
 jobs:
   build-and-deploy:
@@ -12,14 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-
-      - name: Run tests
-        run: go test ./...
         
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
