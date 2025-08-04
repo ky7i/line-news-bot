@@ -6,8 +6,12 @@ import (
 	"net/http"
 )
 
+type NewsCaller interface {
+	CallNewsAPI(requestURL string) (string, error)
+}
+
 type NewsHttpClient interface {
-	Get(url string) (resp *http.Response, err error)	
+	Get(url string) (resp *http.Response, err error)
 }
 
 type NewsApiClient struct {

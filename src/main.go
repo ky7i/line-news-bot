@@ -11,7 +11,31 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+var (
+	newsApiClient NewsApiClient
+	lineApiClient LineApiClient
+)
+
+func init() {
+	// 	controller = Controller{
+	// 		newsApiClient: &NewsApiClient{NewsHttpClient: &http.Client{}},
+	// 		lineApiClient: &LineApiClient{
+	// 			RequestCreator: &DefaultRequestCreator{},
+	// 			LineHttpClient: &http.Client{},
+	// 		},
+	// 	}
+	newsApiClient = NewsApiClient{NewsHttpClient: &http.Client{}}
+	lineApiClient = LineApiClient{
+		RequestCreator: &DefaultRequestCreator{},
+		LineHttpClient: &http.Client{},
+	}
+}
+
 func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return handlerWithDeps(ctx, event, &newsApiClient, &lineApiClient)
+}
+
+func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, newsCaller NewsCaller, lineCaller LineCaller) (events.APIGatewayProxyResponse, error) {
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Body:       "\"Hello from Lambda!\"",
@@ -45,15 +69,13 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 	params.Add("language", os.Getenv("NEWS_API_LANGUAGE"))
 	params.Add("apiKey", os.Getenv("NEWS_API_KEY"))
 
-	newsApiClient := &NewsApiClient{NewsHttpClient: &http.Client{}}
-	news, err := newsApiClient.CallNewsAPI(NEWS_API_BASE_URL + "?" + params.Encode())
+	news, err := newsCaller.CallNewsAPI(NEWS_API_BASE_URL + "?" + params.Encode())
 	if err != nil {
 		fmt.Println(err)
 		return response, err
 	}
 
-	lineApiClient := &LineApiClient{RequestCreator: &DefaultRequestCreator{}, LineHttpClient: &http.Client{}}
-	err = lineApiClient.CallLineAPI(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, news)
+	err = lineCaller.CallLineAPI(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, news)
 	if err != nil {
 		fmt.Println(err)
 		return response, err

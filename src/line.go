@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+type LineCaller interface {
+  CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error 
+}
+
 type RequestCreator interface {
 	NewRequest(method, url string, body io.Reader) (*http.Request, error)
 }
