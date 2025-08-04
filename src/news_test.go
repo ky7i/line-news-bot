@@ -22,7 +22,7 @@ func TestCallNewsAPI_Success(t *testing.T) {
 
 	requestURL := server.URL
 	NewsApiClient := &NewsApiClient{NewsHttpClient: &http.Client{}}
-	result, err := NewsApiClient.CallNewsAPI(requestURL)
+	result, err := NewsApiClient.CallNewsApi(requestURL)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -41,7 +41,7 @@ func TestCallNewsAPI_HTTPError(t *testing.T) {
 
 	requestURL := server.URL
 	NewsApiClient := &NewsApiClient{NewsHttpClient: &http.Client{}}
-	_, err := NewsApiClient.CallNewsAPI(requestURL)
+	_, err := NewsApiClient.CallNewsApi(requestURL)
 	if err == nil {
 		t.Errorf("expected error, got nil")
 	}
@@ -56,7 +56,7 @@ func TestCallNewsAPI_JSONError(t *testing.T) {
 
 	requestURL := server.URL
 	NewsApiClient := &NewsApiClient{NewsHttpClient: &http.Client{}}
-	_, err := NewsApiClient.CallNewsAPI(requestURL)
+	_, err := NewsApiClient.CallNewsApi(requestURL)
 	if err == nil {
 		t.Errorf("expected error, got nil")
 	}
