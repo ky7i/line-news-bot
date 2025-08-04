@@ -16,14 +16,8 @@ var (
 	lineApiClient LineApiClient
 )
 
+// initialize API clients
 func init() {
-	// 	controller = Controller{
-	// 		newsApiClient: &NewsApiClient{NewsHttpClient: &http.Client{}},
-	// 		lineApiClient: &LineApiClient{
-	// 			RequestCreator: &DefaultRequestCreator{},
-	// 			LineHttpClient: &http.Client{},
-	// 		},
-	// 	}
 	newsApiClient = NewsApiClient{NewsHttpClient: &http.Client{}}
 	lineApiClient = LineApiClient{
 		RequestCreator: &DefaultRequestCreator{},
@@ -32,6 +26,8 @@ func init() {
 }
 
 func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// In tests, replace the second and third arguments to mocks.
+	// In production, clients initialized in init() are used
 	return handlerWithDeps(ctx, event, &newsApiClient, &lineApiClient)
 }
 
@@ -42,7 +38,7 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 	}
 
 	// 環境変数
-	// Googleカレンダー
+	// GoogleCalendar
 	// AWS_SECRET_MANAGER_NAME := os.Getenv("AWS_SECRET_MANAGER_NAME")
 	// AWS_SECRET_MANAGER_REGION := os.Getenv("AWS_SECRET_MANAGER_REGION")
 
@@ -62,6 +58,7 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 	// schedule := getCalendar(credential)
 	// fmt.Println("schedule : ", schedule)
 
+	// create a request parameter
 	params := url.Values{}
 	params.Add("q", os.Getenv("NEWS_API_QUERY"))
 	params.Add("sortBy", os.Getenv("NEWS_API_SORT_BY"))
