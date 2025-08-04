@@ -37,7 +37,8 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 		Body:       "\"Hello from Lambda!\"",
 	}
 
-	// 環境変数
+	// environment variable
+
 	// GoogleCalendar
 	// AWS_SECRET_MANAGER_NAME := os.Getenv("AWS_SECRET_MANAGER_NAME")
 	// AWS_SECRET_MANAGER_REGION := os.Getenv("AWS_SECRET_MANAGER_REGION")
@@ -66,13 +67,13 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 	params.Add("language", os.Getenv("NEWS_API_LANGUAGE"))
 	params.Add("apiKey", os.Getenv("NEWS_API_KEY"))
 
-	news, err := newsCaller.CallNewsAPI(NEWS_API_BASE_URL + "?" + params.Encode())
+	news, err := newsCaller.CallNewsApi(NEWS_API_BASE_URL + "?" + params.Encode())
 	if err != nil {
 		fmt.Println(err)
 		return response, err
 	}
 
-	err = lineCaller.CallLineAPI(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, news)
+	err = lineCaller.CallLineApi(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, news)
 	if err != nil {
 		fmt.Println(err)
 		return response, err

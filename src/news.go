@@ -7,7 +7,7 @@ import (
 )
 
 type NewsCaller interface {
-	CallNewsAPI(requestURL string) (string, error)
+	CallNewsApi(requestURL string) (string, error)
 }
 
 type NewsHttpClient interface {
@@ -18,7 +18,7 @@ type NewsApiClient struct {
 	NewsHttpClient NewsHttpClient
 }
 
-func (n *NewsApiClient) CallNewsAPI(requestURL string) (string, error) {
+func (n *NewsApiClient) CallNewsApi(requestURL string) (string, error) {
 	res, err := n.NewsHttpClient.Get(requestURL)
 	if err != nil {
 		return "", err
@@ -36,14 +36,12 @@ func (n *NewsApiClient) CallNewsAPI(requestURL string) (string, error) {
 		return "", err
 	}
 
-	// NewsAPIのレスポンスの整形
-	// TODO: 別関数への切り出し
+	// TODO: extracts into a function
 	contents := "---news---"
 	articles := result["articles"].([]interface{})
 
 	for i := 0; i < len(articles); i++ {
 		content := articles[i].(map[string]interface{})["title"]
-		// titleのvalueがnullのケースへのバリデーション
 		contentStr, ok := content.(string)
 		if !ok {
 			continue

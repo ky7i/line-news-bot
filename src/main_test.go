@@ -13,7 +13,7 @@ type MockNewsCaller struct {
 	CallFunc func(requestURL string) (string, error)
 }
 
-func (n *MockNewsCaller) CallNewsAPI(requestURL string) (string, error) {
+func (n *MockNewsCaller) CallNewsApi(requestURL string) (string, error) {
 	return n.CallFunc(requestURL)
 }
 
@@ -21,22 +21,22 @@ type MockLineCaller struct {
 	CallFunc func(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error
 }
 
-func (l *MockLineCaller) CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
+func (l *MockLineCaller) CallLineApi(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
 	return l.CallFunc(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, inputText)
 }
 
 func TestHandler_Success(t *testing.T) {
 	mockNewsCaller := &MockNewsCaller{
 		CallFunc: func(requestURL string) (string, error) {
-			// NewsAPIのモック: 正常系
-			return "ニュース本文", nil
+			// mock of NewsAPI : Success
+			return "news title", nil
 		},
 	}
 
 	mockLineCaller := &MockLineCaller{
 		CallFunc: func(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
-			// LINE APIのモック: 正常系
-			if inputText != "ニュース本文" {
+			// mock of LineAPI : Success
+			if inputText != "news title" {
 				return errors.New("news content mismatch")
 			}
 			return nil
