@@ -24,6 +24,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      # TODO: delete old images from ECR
       - name: Build, tag, and push image to ECR
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}

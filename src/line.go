@@ -7,6 +7,11 @@ import (
 	"net/http"
 )
 
+// In tests, this interface make it easy to replace CallLineApi with mocks.
+type LineCaller interface {
+	CallLineApi(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error
+}
+
 type RequestCreator interface {
 	NewRequest(method, url string, body io.Reader) (*http.Request, error)
 }
@@ -22,17 +27,10 @@ type LineApiClient struct {
 	LineHttpClient *http.Client
 }
 
-func (l *LineApiClient) CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
-	// HTTPリクエストのBody部作成
-	payload := map[string]interface{}{
-		"to": LINE_API_USER_ID,
-		"messages": []map[string]string{
-			{
-				"type": "text",
-				"text": inputText,
-			},
-		},
-	}
+// push <inputText> to LINE
+func (l *LineApiClient) CallLineApi(LINE_API_URI string, LINE_API_USER_ID string, LINE_API_ACCESS_TOKEN string, inputText string) error {
+	// request Body
+	payload := CreateRequestBody(LINE_API_USER_ID, inputText)
 
 	jsonDate, err := json.Marshal(payload)
 	if err != nil {
@@ -45,13 +43,23 @@ func (l *LineApiClient) CallLineAPI(LINE_API_URI string, LINE_API_USER_ID string
 	}
 
 	req.Header.Add("Content-Type", "application/json")
-	// 認証情報はヘッダーに設定
 	req.Header.Add("Authorization", "Bearer "+LINE_API_ACCESS_TOKEN)
 
-	// 送信処理
 	_, err = l.LineHttpClient.Do(req)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func CreateRequestBody(LINE_API_USER_ID string, inputText string) map[string]any {
+	return map[string]any{
+		"to": LINE_API_USER_ID,
+		"messages": []map[string]string{
+			{
+				"type": "text",
+				"text": inputText,
+			},
+		},
+	}
 }

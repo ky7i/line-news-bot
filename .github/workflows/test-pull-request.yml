@@ -1,5 +1,4 @@
-name: auto test when pull request is throwed to main
-
+name: auto test at pull request
 on:
   pull_request:
     branches:
