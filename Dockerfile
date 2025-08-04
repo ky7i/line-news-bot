@@ -1,7 +1,7 @@
 FROM golang:1.24.1-alpine3.21 as build
 WORKDIR /home
 RUN apk add git \
-&& git clone --depth 1 -b develop https://github.com/ky7i/line-news-bot
+&& git clone --depth 1 -b main https://github.com/ky7i/line-news-bot
 WORKDIR /home/line-news-bot/src
 RUN CGO_ENABLED=0 go build -tags lambda.norpc -o main
 
