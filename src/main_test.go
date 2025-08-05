@@ -55,6 +55,7 @@ func TestHandler_Success(t *testing.T) {
 func TestHandler_CallNewsAPIError(t *testing.T) {
 	mockNewsCaller := &MockNewsCaller{
 		CallFunc: func(requestURL string) (string, error) {
+			// error in NewsAPI
 			return "", errors.New("news error")
 		},
 	}
@@ -80,6 +81,7 @@ func TestHandler_CallLineAPIError(t *testing.T) {
 	}
 	mockLineCaller := &MockLineCaller{
 		CallFunc: func(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, inputText string) error {
+			// error in Line API
 			return errors.New("line error")
 		},
 	}
@@ -93,37 +95,50 @@ func TestHandler_CallLineAPIError(t *testing.T) {
 }
 
 // Additional tests
-// func TestHandler_EmptyNews(t *testing.T) {
-// 	mockCallNewsAPI = func() (string, error) { return "", nil }
-// 	mockCallLineAPI = func(news string) error { return nil }
-//
-// 	resp, err := handler(context.Background(), events.APIGatewayProxyRequest{})
-// 	if err != nil {
-// 		t.Fatalf("expected no error, got %v", err)
-// 	}
-// 	if resp.StatusCode != 200 {
-// 		t.Errorf("expected status 200, got %d", resp.StatusCode)
-// 	}
-// }
-//
-// func TestHandler_LongNews(t *testing.T) {
-// 	longNews := ""
-// 	for i := 0; i < 1000; i++ {
-// 		longNews += "news "
-// 	}
-// 	mockCallNewsAPI = func() (string, error) { return longNews, nil }
-// 	mockCallLineAPI = func(news string) error {
-// 		if news != longNews {
-// 			return errors.New("news content mismatch")
-// 		}
-// 		return nil
-// 	}
-//
-// 	resp, err := handler(context.Background(), events.APIGatewayProxyRequest{})
-// 	if err != nil {
-// 		t.Fatalf("expected no error, got %v", err)
-// 	}
-// 	if resp.StatusCode != 200 {
-// 		t.Errorf("expected status 200, got %d", resp.StatusCode)
-// 	}
-// }
+func TestHandler_EmptyNews(t *testing.T) {
+	mockNewsCaller := &MockNewsCaller{
+		CallFunc: func(requestURL string) (string, error) {
+			// value is empty
+			return "", nil
+		},
+	}
+	mockLineCaller := &MockLineCaller{
+		CallFunc: func(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, inputText string) error {
+			return nil
+		},
+	}
+	resp, err := handlerWithDeps(context.Background(), events.APIGatewayProxyRequest{}, mockNewsCaller, mockLineCaller)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.StatusCode != 200 {
+		t.Errorf("expected status 200, got %d", resp.StatusCode)
+	}
+}
+
+func TestHandler_LongNews(t *testing.T) {
+	longNews := ""
+	for i := 0; i < 1000; i++ {
+		longNews += "news "
+	}
+	mockNewsCaller := &MockNewsCaller{
+		CallFunc: func(requestURL string) (string, error) {
+			return longNews, nil
+		},
+	}
+	mockLineCaller := &MockLineCaller{
+		CallFunc: func(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, inputText string) error {
+			if inputText != longNews {
+				return errors.New("news content mismatch")
+			}
+			return nil
+		},
+	}
+	resp, err := handlerWithDeps(context.Background(), events.APIGatewayProxyRequest{}, mockNewsCaller, mockLineCaller)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if resp.StatusCode != 200 {
+		t.Errorf("expected status 200, got %d", resp.StatusCode)
+	}
+}
