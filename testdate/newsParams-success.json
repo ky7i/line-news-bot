@@ -1,0 +1,23 @@
+{
+  "title": "newsParams",
+  "description": "Configure NewsAPI query parameters. The API key should be set in code, not in this file.",
+  "reference": "https://newsapi.org/docs/endpoints/everything",
+  "params": [
+    {
+      "key": "q",
+      "value": "query"
+    },
+    {
+      "key": "sortBy",
+      "value": "sortBy"
+    },
+    {
+      "key": "pageSize",
+      "value": "pageSize"
+    }, 
+    {
+      "key": "language",
+      "value": "language"
+    } 
+  ]
+}
