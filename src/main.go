@@ -38,6 +38,10 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 
 	// environment variable
 
+	// NewsAPI
+	NEWS_API_BASE_URL := os.Getenv("NEWS_API_BASE_URL")
+	NEWS_API_KEY := os.Getenv("NEWS_API_KEY")
+
 	// GoogleCalendar
 	// AWS_SECRET_MANAGER_NAME := os.Getenv("AWS_SECRET_MANAGER_NAME")
 	// AWS_SECRET_MANAGER_REGION := os.Getenv("AWS_SECRET_MANAGER_REGION")
@@ -55,16 +59,17 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 	// schedule := getCalendar(credential)
 	// fmt.Println("schedule : ", schedule)
 
-	newsAPIParams := NewsAPIParams{
-		BaseURL:  os.Getenv("NEWS_API_BASE_URL"),
-		Query:    os.Getenv("NEWS_API_QUERY"),
-		SortBy:   os.Getenv("NEWS_API_SORT_BY"),
-		PageSize: os.Getenv("NEWS_API_PAGE_SIZE"),
-		Language: os.Getenv("NEWS_API_LANGUAGE"),
-		APIKey:   os.Getenv("NEWS_API_KEY"),
-	}
+	//	newsAPIParams := NewsAPIParams{
+	//		BaseURL:  os.Getenv("NEWS_API_BASE_URL"),
+	//		Query:    os.Getenv("NEWS_API_QUERY"),
+	//		SortBy:   os.Getenv("NEWS_API_SORT_BY"),
+	//		PageSize: os.Getenv("NEWS_API_PAGE_SIZE"),
+	//		Language: os.Getenv("NEWS_API_LANGUAGE"),
+	//		APIKey:   os.Getenv("NEWS_API_KEY"),
+	//	}
 
-	newsAPIURL, err := BuildNewsAPIURL(newsAPIParams)
+	// newsAPIURL, err := BuildNewsAPIURL(newsAPIParams)
+	newsAPIURL, err := BuildNewsAPIURL("../newsParams.json", NEWS_API_BASE_URL, NEWS_API_KEY)
 	if err != nil {
 		fmt.Println(err)
 	}
