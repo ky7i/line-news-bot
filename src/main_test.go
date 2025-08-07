@@ -56,7 +56,7 @@ func TestHandler_CallNewsAPIError(t *testing.T) {
 	mockNewsCaller := &MockNewsCaller{
 		CallFunc: func(requestURL string) (string, error) {
 			// error in NewsAPI
-			return "", errors.New("news error")
+			return "", errors.New("news error in a mock server")
 		},
 	}
 	mockLineCaller := &MockLineCaller{
@@ -82,7 +82,7 @@ func TestHandler_CallLineAPIError(t *testing.T) {
 	mockLineCaller := &MockLineCaller{
 		CallFunc: func(LINE_API_URI, LINE_API_USER_ID, LINE_API_ACCESS_TOKEN, inputText string) error {
 			// error in Line API
-			return errors.New("line error")
+			return errors.New("line error in a mock server")
 		},
 	}
 	resp, err := handlerWithDeps(context.Background(), events.APIGatewayProxyRequest{}, mockNewsCaller, mockLineCaller)
