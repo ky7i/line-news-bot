@@ -1,6 +1,3 @@
-//go:build testonly
-// +build testonly
-
 package main
 
 import (
@@ -11,7 +8,7 @@ import (
 func TestBuildNewsAPIURL_Success(t *testing.T) {
 	fileName := "../testdate/newsParams-success.json"
 	baseURL := "http://test.com"
-	apiKey := "test"
+	apiKey := "apiKey"
 	newsAPIURL, err := BuildNewsAPIURL(fileName, baseURL, apiKey)
 	if err != nil {
 		t.Errorf("expected no error, got %v", err)
