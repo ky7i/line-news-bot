@@ -65,3 +65,16 @@ func TestBuildNewsAPIURL_FileEmpty(t *testing.T) {
 		t.Errorf("expected the message 'params file is empty', got this : %v", err)
 	}
 }
+
+func TestBuildNewsAPIURL_NotJsonFormatt(t *testing.T) {
+	fileName := "../testdate/newsParams-notJsonFormatt.json"
+	baseURL := "http://test.com"
+	apiKey := "apiKey"
+	_, err := BuildNewsAPIURL(fileName, baseURL, apiKey)
+	if err == nil {
+		t.Errorf("expected file unmarshal error, got no errors")
+	}
+	if err != nil && !strings.Contains(err.Error(), "failed to decode params json:") {
+		t.Errorf("expected the message 'failed to decode params json', got this : %v", err)
+	}
+}
