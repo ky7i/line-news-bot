@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -36,5 +37,31 @@ func TestBuildNewsAPIURL_Success(t *testing.T) {
 	}
 	if u.Scheme != "http" || u.Host != "test.com" {
 		t.Errorf("unexpected base url: %v", newsAPIURL)
+	}
+}
+
+func TestBuildNewsAPIURL_FileNotFound(t *testing.T) {
+	fileName := "invalid.json"
+	baseURL := "http://test.com"
+	apiKey := "apiKey"
+	_, err := BuildNewsAPIURL(fileName, baseURL, apiKey)
+	if err == nil {
+		t.Errorf("expected file not found error, got no errors")
+	}
+	if err != nil && !strings.Contains(err.Error(), "failed to open params file:") {
+		t.Errorf("expected the message 'failed to open params file: <<error>>', got this : %v", err)
+	}
+}
+
+func TestBuildNewsAPIURL_FileEmpty(t *testing.T) {
+	fileName := "../testdate/newsParams-empty.json"
+	baseURL := "http://test.com"
+	apiKey := "apiKey"
+	_, err := BuildNewsAPIURL(fileName, baseURL, apiKey)
+	if err == nil {
+		t.Errorf("expected file empty error, got no errors")
+	}
+	if err != nil && !strings.Contains(err.Error(), "params file is empty") {
+		t.Errorf("expected the message 'params file is empty', got this : %v", err)
 	}
 }
