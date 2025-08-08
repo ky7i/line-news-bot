@@ -27,6 +27,11 @@ func BuildNewsAPIURL(fileName, baseURL, apiKey string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to open params file: %w", err)
 	}
+	stat, _ := file.Stat()
+	size := stat.Size()
+	if size == 0 {
+		return "", fmt.Errorf("params file is empty")
+	}
 	defer file.Close()
 
 	var paramsFile NewsParamsFile
@@ -47,17 +52,3 @@ func BuildNewsAPIURL(fileName, baseURL, apiKey string) (string, error) {
 	u.RawQuery = q.Encode()
 	return u.String(), nil
 }
-
-//	u, err := url.Parse(p.BaseURL)
-//	if err != nil {
-//		fmt.Println(err)
-//		return "", err
-//	}
-//	q := u.Query()
-//	q.Set("q", p.Query)
-//	q.Set("sortBy", p.SortBy)
-//	q.Set("pageSize", p.PageSize)
-//	q.Set("language", p.Language)
-//	q.Set("apiKey", p.APIKey)
-//	u.RawQuery = q.Encode()
-//	return u.String(), nil
