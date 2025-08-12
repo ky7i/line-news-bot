@@ -37,6 +37,7 @@ func (n *NewsApiClient) CallNewsApi(requestURL string) (string, error) {
 	}
 
 	// TODO: extracts into a function
+	// TODO: return the URL in addition to the title
 	contents := "---news---"
 	articles := result["articles"].([]interface{})
 
