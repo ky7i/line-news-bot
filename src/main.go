@@ -25,6 +25,7 @@ func init() {
 }
 
 // TODO: consider this function signature
+// reference: https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/golang-handler.html#golang-handler-signatures
 func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// In tests, replace the second and third arguments to mocks.
 	// In production, clients initialized in init() are used
@@ -32,12 +33,11 @@ func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 }
 
 func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, newsCaller NewsCaller, lineCaller LineCaller) (events.APIGatewayProxyResponse, error) {
+	// TODO: Add more response variation, like 5XX
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Body:       "\"Hello from Lambda!\"",
 	}
-
-	// environment variable
 
 	// NewsAPI
 	NEWS_API_BASE_URL := os.Getenv("NEWS_API_BASE_URL")
@@ -64,6 +64,7 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 	newsAPIURL, err := BuildNewsAPIURL(NEWS_PARAMETER_FILE, NEWS_API_BASE_URL, NEWS_API_KEY)
 	if err != nil {
 		log.Println(err)
+		return response, err
 	}
 
 	news, err := newsCaller.CallNewsApi(newsAPIURL)
