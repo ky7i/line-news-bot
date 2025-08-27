@@ -60,7 +60,8 @@ func handlerWithDeps(ctx context.Context, event events.APIGatewayProxyRequest, n
 	// schedule := getCalendar(credential)
 	// fmt.Println("schedule : ", schedule)
 
-	newsAPIURL, err := BuildNewsAPIURL("../newsParams.json", NEWS_API_BASE_URL, NEWS_API_KEY)
+	NEWS_PARAMETER_FILE := os.Getenv("NEWS_PARAMETER_FILE")
+	newsAPIURL, err := BuildNewsAPIURL(NEWS_PARAMETER_FILE, NEWS_API_BASE_URL, NEWS_API_KEY)
 	if err != nil {
 		log.Println(err)
 	}
