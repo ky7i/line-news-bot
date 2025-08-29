@@ -20,4 +20,4 @@ jobs:
       - name: Run tests
         run: go test ./...
         env:
-          NEWS_PARAMETER_FILE: newsParams.json
+          NEWS_PARAMETER_FILE: ${{ github.workspace }}/newsParams.json
